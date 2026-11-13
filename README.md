@@ -43,7 +43,7 @@ Nel profilo, riga `profile-sync`:
     file: dsh-profile.json
     excludeEntries: []    # id di righe da non sincronizzare (es. percorsi macchina)
     prune: false          # true = rimuove anche override locali assenti dallo snapshot
-    lanEnabled: false     # sidecar LAN: spento finché non lo accendi tu
+    lanEnabled: false     # default al primo avvio; poi comanda l'interruttore nel pannello
     lanPort: 47931
     lanDiscoveryPort: 47932
     lanAutoApply: true
@@ -107,8 +107,9 @@ poi, dal Plugin Manager (o chiedendo all'agente), installa il bundle da
 
 ## Sidecar LAN (senza Git)
 
-Con `lanEnabled: true` il plugin espone un piccolo server P2P sulla LAN
-(`0.0.0.0:47931`) e si annuncia via UDP broadcast su `47932`. Serve per spingere
+Attivandolo dal pannello (o con `lan-enable`) il plugin espone un piccolo server P2P sulla LAN
+(`0.0.0.0:47931`) e si annuncia via UDP broadcast su `47932`. L'interruttore è
+salvato in `~/.dsh/profile-sync/lan.json` e non ricarica il plugin. Serve per spingere
 la configurazione da un PC all'altro con un pulsante, senza passare da GitHub.
 
 1. Accendi la LAN su entrambi i PC: pannello **Sync** in basso a destra, oppure
