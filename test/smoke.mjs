@@ -161,9 +161,16 @@ const { services, calls, config } = fakeProfile({ bundles: baseBundles, plugins,
   assert.equal(plan.skipped.length, 1)
   assert.equal(plan.skipped[0].id, 'missing-row')
 
-  const excludedPlan = planPull({ remote, local, catalog, excludeEntries: ['ui-theme'] })
+  const excludedPlan = planPull({ remote, local, catalog, excludeEntries: ['ui-theme', 'session-log-deepseek'] })
   assert.deepEqual(excludedPlan.entries.map((item) => item.id), [])
-  assert.equal(excludedPlan.skipped.some((item) => item.id === 'ui-theme' && /excluded/.test(item.reason)), true)
+  assert.deepEqual(excludedPlan.plugins, [], 'excluded rows are not toggled')
+  assert.equal(
+    excludedPlan.skipped.filter((item) => /excluded/.test(item.reason)).length,
+    3,
+    'both entries and both rows are reported as skipped',
+  )
+  const scoped = await capture(services, { profile: 'web', excludeEntries: ['session-log-deepseek'] })
+  assert.equal(scoped.snapshot.plugins.some((item) => item.id === 'session-log-deepseek'), false)
   ok('planPull computes installs, toggles, configs and skips')
 
   const before = calls.length
