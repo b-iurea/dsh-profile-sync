@@ -12,3 +12,8 @@
         profile: ''
         excludeEntries: []
         prune: false
+        lanEnabled: false
+        lanPort: 47931
+        lanDiscoveryPort: 47932
+        lanAutoApply: true
+        manualPeers: []

@@ -1,6 +1,6 @@
 {
   "name": "dsh-profile-sync",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Keep DeepSeek Harness providers, plugin selection and settings aligned between machines through a Git repository or a shared folder.",
   "type": "module",
@@ -8,11 +8,15 @@
   "exports": {
     ".": "./lib/index.js",
     "./icon": "./icon.svg",
-    "./locale/*.json": "./locale/*.json"
+    "./locale/*.json": "./locale/*.json",
+    "./client": "./lib/client.js"
   },
   "files": [
     "lib/index.js",
     "lib/sync.js",
+    "lib/lan.js",
+    "lib/lan-host.js",
+    "lib/client.js",
     "cordis.patch.yml",
     "locale/*.json",
     "icon.svg",
@@ -24,6 +28,9 @@
   "dsh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web"
     }
   }
 }

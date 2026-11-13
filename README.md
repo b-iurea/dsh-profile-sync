@@ -43,6 +43,11 @@ Nel profilo, riga `profile-sync`:
     file: dsh-profile.json
     excludeEntries: []    # id di righe da non sincronizzare (es. percorsi macchina)
     prune: false          # true = rimuove anche override locali assenti dallo snapshot
+    lanEnabled: false     # sidecar LAN: spento finché non lo accendi tu
+    lanPort: 47931
+    lanDiscoveryPort: 47932
+    lanAutoApply: true
+    manualPeers: []       # URL espliciti se il broadcast UDP non passa (es. reti con VLAN)
 ```
 
 `repo` accetta:
@@ -100,6 +105,31 @@ poi, dal Plugin Manager (o chiedendo all'agente), installa il bundle da
 - Lo stato dell'ultimo sync è in `~/.dsh/profile-sync/state.json`; in modalità Git
   ogni macchina lascia anche `machines/<hostname>.json` nel repository.
 
+## Sidecar LAN (senza Git)
+
+Con `lanEnabled: true` il plugin espone un piccolo server P2P sulla LAN
+(`0.0.0.0:47931`) e si annuncia via UDP broadcast su `47932`. Serve per spingere
+la configurazione da un PC all'altro con un pulsante, senza passare da GitHub.
+
+1. Accendi la LAN su entrambi i PC: pannello **Sync** in basso a destra, oppure
+   `profile_sync { action: "lan-enable" }`.
+2. Scegli il PC scoperto e premi **Accoppia** (in alternativa incolla il suo URL
+   `http://<ip>:47931`). Compare un codice a 6 cifre su entrambi gli schermi:
+   confrontalo e approva sul PC che riceve la richiesta.
+3. Da quel momento i due PC sono fidati: **Push** invia lo snapshot, il ricevente
+   lo applica subito (con backup) e mostra un banner "Ricarica la pagina".
+4. Ogni 24 ore un controllo confronta gli hash e segnala la divergenza; il pulsante
+   **Controlla** lo esegue subito.
+
+La fiducia non è a chiave condivisa in chiaro: l'accoppiamento usa X25519 e il
+codice a 6 cifre lega il canale; ogni chiamata successiva è firmata HMAC-SHA256
+con un token derivato dal segreto ECDH, finestra di 120 s e cache anti-replay.
+I peer fidati e i loro token stanno in `~/.dsh/profile-sync/lan.json` (0600).
+
+Cosa NON fa il sidecar: non trasporta sessioni, non esegue tool sull'altro PC, non
+installa bundle automaticamente. I bundle mancanti finiscono in una coda e vanno
+installati a mano (supply chain). Il server ascolta solo quando `lanEnabled` è true.
+
 ## Note
 
 - Le versioni dei bundle non vengono aggiornate automaticamente: lo snapshot le
@@ -108,6 +138,10 @@ poi, dal Plugin Manager (o chiedendo all'agente), installa il bundle da
   (come farebbe `dsh plugin add`). Per la maggior parte dei casi non cambia nulla.
 - Le variabili d'ambiente referenziate vanno impostate su entrambe le macchine:
   il plugin non le copia.
+- Il sidecar LAN è pensato per una rete fidata (casa/ufficio). Se il PC di lavoro
+  è su una rete gestita, tieni `lanEnabled: false` lì e usa Git.
+- Verifica offline: `node test/smoke.mjs`, `node test/lan-smoke.mjs`,
+  `node test/client-smoke.mjs`.
 - **Endpoint diversi per macchina** (es. un baseURL sulla LAN di casa che al lavoro
   non esiste): la riga `profile-sync` non viene mai esportata, quindi ogni macchina
   può avere la propria lista `excludeEntries`. Le righe elencate lì non vengono
