@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Sincronizzazione profilo",
+    "description": "Mantiene allineati provider, plugin e impostazioni tra più computer tramite un repository Git o una cartella condivisa."
+  }
+}

@@ -1,0 +1,14 @@
+# dsh-profile-sync bundle patch.
+#
+# The plugin only reads and writes the profile through the plugin manager and
+# config editor services; it never edits this file (or the profile patch) itself.
+- insert:
+    - id: profile-sync
+      name: dsh-profile-sync
+      config:
+        repo: ''
+        branch: ''
+        file: dsh-profile.json
+        profile: ''
+        excludeEntries: []
+        prune: false
