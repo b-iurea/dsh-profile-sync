@@ -1,8 +1,7 @@
 {
   "name": "dsh-profile-sync",
   "version": "0.2.0",
-  "private": true,
-  "description": "Keep DeepSeek Harness providers, plugin selection and settings aligned between machines through a Git repository or a shared folder.",
+  "description": "Keep DeepSeek Harness providers, plugins and settings aligned between machines over Git or a LAN sidecar.",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
@@ -20,7 +19,8 @@
     "cordis.patch.yml",
     "locale/*.json",
     "icon.svg",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "engines": {
     "node": ">=20"
@@ -35,5 +35,25 @@
         "@deepseek-ai/dsh-client-ui-slots"
       ]
     }
-  }
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/b-iurea/dsh-profile-sync"
+  },
+  "homepage": "https://github.com/b-iurea/dsh-profile-sync#readme",
+  "bugs": {
+    "url": "https://github.com/b-iurea/dsh-profile-sync/issues"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "deepseek",
+    "cordis",
+    "profile",
+    "sync",
+    "lan",
+    "backup"
+  ]
 }

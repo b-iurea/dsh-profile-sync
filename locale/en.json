@@ -1,6 +1,6 @@
 {
   "meta": {
     "title": "Profile sync",
-    "description": "Keeps providers, plugin selection and settings aligned between machines through a Git repository or a shared folder."
+    "description": "Keeps providers, plugin selection and settings aligned between machines through a Git repository, a shared folder or a LAN sidecar."
   }
 }
